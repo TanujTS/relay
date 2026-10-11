@@ -1,7 +1,7 @@
 import { createApp } from "./app.js";
-import { parsePort } from "./config.js";
+import { env } from "./env.js";
 
-const port = parsePort(process.env.PORT);
+const port = env.PORT;
 const server = createApp().listen(port, "0.0.0.0", () => {
   console.info(`Relay API listening on port ${port}`);
 });
