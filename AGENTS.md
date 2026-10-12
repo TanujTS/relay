@@ -1,76 +1,37 @@
 # AGENTS.md
 
-## Project Context
+## What this is
 
-This repository implements an API usage intelligence platform focused on:
+Relay shows teams how their apps use third-party APIs (OpenAI, Resend, etc.): how many calls, what it costs, what fails. Apps send usage events to Relay through an SDK or HTTP. Relay never sits between an app and its providers.
 
-- usage
-- cost
-- errors
-- alerts for third-party API/service consumption
+Read `docs/product.md` for scope and `docs/architecture.md` for how it works.
 
-Read `docs/specification.md` before making substantial product or architectural changes.
+## Layout
 
-## General Rules
+- `apps/api`: Express API
+- `apps/web`: Next.js dashboard
+- `apps/worker`: background jobs (pricing, rules, webhooks), not created yet
+- `packages/db`, `packages/contracts`: planned
 
-- Prefer the simplest correct implementation for current requirements.
-- Do not introduce infrastructure or abstractions for hypothetical scale.
-- Do not broaden the product into generic observability, logging, tracing, or infrastructure monitoring.
-- Do not invent product requirements when behaviour is materially ambiguous.
-- Preserve existing external contracts unless the task explicitly changes them.
-- Treat correctness around usage, cost, retries, deduplication, and alerting as high priority.
-- Never store or log real third-party API secrets in telemetry.
-- Validate all untrusted runtime input.
-- Enforce project-level data isolation and authorization.
-- Prefer focused changes; avoid unrelated refactors.
-- Add or update tests for changed behaviour and important failure paths.
-- Before finishing, verify the implementation against the task, `docs/specification.md`, and relevant existing decisions.
+## Commands
 
-## Architecture Decisions
+`pnpm dev`, `pnpm lint`, `pnpm check-types`, `pnpm build`
 
-Create or update an ADR only for significant architectural decisions, such as:
+## Rules
 
-- introducing a queue, cache, or new datastore
-- changing ingestion semantics
-- changing deduplication or retry guarantees
-- changing aggregation strategy
-- changing webhook delivery semantics
+- Keep it simple. Build what the current step needs, no extra infrastructure.
+- Stay in scope: API usage, cost, errors, alerts. No general logging or monitoring.
+- Never store or log provider API keys or secrets.
+- Validate all input with zod. Check project access on every project-scoped query.
+- Money and quantities are decimal strings, never floats.
+- Retrying an event must never count it twice.
+- Add tests for new behavior and failure cases, especially duplicate events.
+- Make focused changes. No unrelated refactors.
+- If a requirement is unclear, ask instead of guessing.
 
-Do not create ADRs for routine implementation details.
+## Docs
 
-## Guiding Questions
-
-For architectural complexity:
-
-> What concrete problem requires this?
-
-For product scope:
-
-> Does this help users understand or act on external API usage, cost, or errors?
-
-## Documentation Structure
-
-- `docs/specification.md` — product scope, requirements, boundaries, core behavior.
-- `docs/architecture/README.md` — current system architecture.
-- `docs/architecture/decisions/` — ADRs for significant architectural decisions.
-- `docs/features/<feature>/spec.md` — feature requirements and acceptance criteria.
-- `docs/features/<feature>/plan.md` — implementation plan for that feature.
-
-For substantial new features, create or update the relevant feature spec before implementation.
-
-Do not create extra documentation files unless they add clear value.
-
-## Documentation Style
-
-Apply this style when creating or editing specifications, architecture documents, plans, and ADRs:
-
-- Use plain, direct explanations with short paragraphs and descriptive headings.
-- Start with the purpose and overall flow, then explain each part in the order a reader needs it.
-- Show concrete examples of inputs, outcomes, retries, and failures alongside the behavior they illustrate.
-- Use small Mermaid diagrams for flows and sequences, and tables for alternatives or repeated comparisons.
-- Use technical terms where useful without adding glossary-style definitions; explain what the system does and why.
-- Keep requirements, recommendations, and open decisions clearly distinguished. Preserve guarantees and failure limits when simplifying language.
-- For material design choices, compare alternatives, recommend one with its reason, describe failures/limits, and state when to revisit it and whether an ADR is needed.
-- Keep each rule in its owning document and link to it elsewhere. Use fenced blocks only for code, diagrams, or examples, not entire documents.
-
-Before writing documentation, read `docs/features/event-recording/architecture.md` as the approved style reference. Match its plain explanations, concrete examples, and visual structure, scaling detail to the document's purpose.
+- Write docs when you build the feature, not before.
+- Use plain words, short sentences, and an example for anything non-obvious.
+- Say each fact once and link to it elsewhere.
+- Add an ADR in `docs/decisions/` only when changing how events are saved, de-duplicated, priced or delivered, or when adding new infrastructure. Keep it under 20 lines.
