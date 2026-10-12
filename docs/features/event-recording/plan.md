@@ -58,7 +58,7 @@ Use `workspace:*` to consume the SDK in a local example. Before release, run `np
 ## Implementation order
 
 1. Finalize the versioned event/batch and acknowledgement schemas. Set concrete limits and public error/diagnostic types; record significant delivery decisions as the architecture requires.
-2. Implement authenticated ingestion and Neon persistence through `packages/db`. The current health endpoint cannot prove event recording.
+2. Implement authenticated ingestion and Neon persistence through `packages/db`, following the [backend-first milestones](../../architecture/README.md#backend-first-milestones) and [schema proposal](../../architecture/database-schema.md). The current health endpoint cannot prove event recording.
 3. Implement manual recording and explicit flush against that endpoint. Keep normalization and validation pure; isolate network calls and client-owned queue state.
 4. Add bounded batching, retry scheduling, and shutdown using the owning architecture rules. Preserve event identity throughout delivery.
 5. Run an external-package smoke exercise against the API/database: saved event, repeated ID, rejected credentials/input, and delivery failure. No test folder is needed for this exercise.

@@ -6,6 +6,8 @@ This is a recommended design, not an implemented or approved architecture. It fo
 
 The examples describe proposed behavior. Choices affecting users still need agreement and matching specification updates before implementation. The event format also needs one final versioned HTTP schema; earlier conceptual examples are not separate formats to support through silent fallbacks.
 
+The [backend proposal](../../architecture/README.md) develops the API-first build order, concrete transaction flow, and failure dry runs. The [database proposal](../../architecture/database-schema.md) maps this design to project-scoped tables and constraints; both remain proposed.
+
 ## The whole flow
 
 ```mermaid

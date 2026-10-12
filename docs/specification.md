@@ -45,7 +45,7 @@ Do not add these without intentionally changing this specification:
 
 ## Projects, environments, and key labels
 
-A project groups usage for an application such as FormSpace or Internal AI Tool. It owns its ingestion credentials, environments, events, rules, webhook endpoints, and alerts.
+A project groups usage for an application such as FormSpace or Internal AI Tool. It owns its ingestion key, environments, events, rules, webhook endpoints, and alerts.
 
 Every project-scoped operation must check access. Data from one project must never be accessible through another.
 
@@ -139,6 +139,8 @@ Check user-configured destinations before production. Block localhost, loopback/
 ## Authentication, privacy, and records
 
 User login, project access, ingestion credentials, and webhook signing secrets serve different purposes and must stay separate.
+
+Each project can have only one active ingestion key. It does not expire automatically. Users can revoke it or regenerate a replacement. Regeneration invalidates the previous credential; revoked credentials cannot be reactivated.
 
 Collect only information needed for consumption analysis. Discourage or prevent provider credentials, authorization headers, passwords, sensitive request/response content, and unnecessary personal data. Never log secrets.
 
