@@ -22,12 +22,11 @@ Apps keep calling providers directly. After each call, the SDK sends Relay a sma
   "provider": "openai",
   "operation": "chat.completions",
   "keyLabel": "openai-production",
-  "environment": "production",
   "outcome": "success",
   "startedAt": "2026-10-13T10:00:00Z",
   "usage": [
-    { "metric": "tokens", "unit": "input", "quantity": "1200" },
-    { "metric": "tokens", "unit": "output", "quantity": "400" }
+    { "metric": "input_tokens", "unit": "token", "quantity": "1200" },
+    { "metric": "output_tokens", "unit": "token", "quantity": "400" }
   ],
   "reportedCost": { "amount": "0.0123", "currency": "USD" }
 }
@@ -52,7 +51,7 @@ CPU/memory monitoring, tracing, log search, incident management, ML anomaly dete
 ## Rules that matter
 
 - Retries never double-count: the same event sent twice is counted once.
-- Unknown cost is "unknown", never zero.
+- Missing cost is `unaccounted`, never zero. Show reported and estimated totals separately, with the number of unaccounted events.
 - Every cost has a currency and is marked "reported" or "estimated".
 - Different units are never added together (tokens and pages stay separate).
 - One project can never see another project's data.
